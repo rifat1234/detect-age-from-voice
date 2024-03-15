@@ -6,10 +6,6 @@ import soundfile as sf
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.preprocessing import StandardScaler
-from sklearn import preprocessing
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import f_classif
 import joblib
 
 # DESIGN implement changes to the standard streamlit UI/UX
@@ -30,13 +26,17 @@ st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''',
 
 def audiorec_demo_app():
     # TITLE and Creator information
-    st.title('streamlit audio recorder')
+    st.title('Detect Age from Voice')
     st.markdown('Implemented by '
-                '[Stefan Rummer](https://www.linkedin.com/in/stefanrmmr/) - '
+                '[Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/) - '
                 'view project source code on '
 
-                '[GitHub](https://github.com/stefanrmmr/streamlit-audio-recorder)')
+                '[GitHub](https://github.com/rifat1234/streamlit-age-from-voice)')
     st.write('\n\n')
+    st.header('Instructions:')
+    st.markdown('Press \'Start Recording\' to record your voice. \n\nSay: '
+                '\'Hi, I am [Your full name]. Nice to meet you AI. Can you guess my age from my voice?\' \n\n'
+                'Then press \'Stop\'')
 
     # TUTORIAL: How to use STREAMLIT AUDIO RECORDER?
     # by calling this function an instance of the audio recorder is created
@@ -46,19 +46,12 @@ def audiorec_demo_app():
 
     # add some spacing and informative messages
     col_info, col_space = st.columns([0.57, 0.43])
-    with col_info:
-        st.write('\n')  # add vertical spacer
-        st.write('\n')  # add vertical spacer
-        st.write('The .wav audio data, as received in the backend Python code,'
-                 ' will be displayed below this message as soon as it has'
-                 ' been processed. [This informative message is not part of'
-                 ' the audio recorder and can be removed easily] 🎈')
+    #with col_info:
 
     if wav_audio_data is not None:
         # display audio data as received on the Python side
         col_playback, col_space = st.columns([0.58, 0.42])
         with col_playback:
-            st.audio(wav_audio_data, format='audio/wav')
             sfo = sf.SoundFile(io.BytesIO(wav_audio_data))
             audio, sampling_rate = librosa.load(sfo)
 
@@ -95,7 +88,8 @@ def audiorec_demo_app():
 
             model = pickle.load(open('knn_model.pkl', 'rb'))
             pred = model.predict(X_new)
-            st.write(encoder.inverse_transform(pred))
+            output = f"You are in your  :green[**{encoder.inverse_transform(pred)[0]}**]"
+            st.markdown(output)
 
 
 if __name__ == '__main__':
