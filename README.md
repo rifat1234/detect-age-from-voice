@@ -1,6 +1,6 @@
 # Detect Age & Gender from Voice
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agefromvoice.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://detect-age-and-gender-from-voice.streamlit.app)
 
 Classify your age & gender on-the-fly with this mighty app. Check if your voice sounds like you are `male` or `female` and in which age group:`teens`, `twenties`, `thirties`, `fourties`, `fifties`, `sexties`, `seventies`, `eighties` or `nineties`. 🚀
 
