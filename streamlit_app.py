@@ -87,37 +87,76 @@ def predict_gender(df):
     knn_pred = predict('gender/knn_model.pkl', X_new)
     return encoder.inverse_transform(knn_pred)[0]
 
+def setup_layout():
+    def setup_sideBar():
+        st.sidebar.header('About')
+        st.sidebar.markdown("""
+            App is created using [MFCCs](https://librosa.org/doc/main/generated/librosa.feature.mfcc.html) feature extractor, [scikit-learn](https://scikit-learn.org/stable/) and 🎈[Streamlit](https://streamlit.io/).
+            [Common voice](https://www.kaggle.com/datasets/mozillaorg/common-voice) database is used for training.
+            """)
+        # st.sidebar.markdown("""
+        #     [Common voice database](https://www.kaggle.com/datasets/mozillaorg/common-voice) is used for training.
+        #     """)
+        st.sidebar.markdown("""
+            Developed by [Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/)
+            """)
 
-# DESIGN implement changes to the standard streamlit UI/UX
-# --> optional, not relevant for the functionality of the component!
-st.set_page_config(page_title="streamlit_audio_recorder")
-# Design move app further up and remove top padding
-st.markdown('''<style>.css-1egvi7u {margin-top: -3rem;}</style>''',
-            unsafe_allow_html=True)
-# Design change st.Audio to fixed height of 45 pixels
-st.markdown('''<style>.stAudio {height: 45px;}</style>''',
-            unsafe_allow_html=True)
-# Design change hyperlink href link color
-st.markdown('''<style>.css-v37k9u a {color: #ff4c4b;}</style>''',
-            unsafe_allow_html=True)  # darkmode
-st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''',
-            unsafe_allow_html=True)  # lightmode
+        st.sidebar.header("Resources")
+        st.sidebar.markdown(
+                        """
+                        - [Source Code](https://github.com/rifat1234/detect-age-from-voice)
+                        - [Project Report](https://www.overleaf.com/read/vbptvvrhzswt#b2f2bd)
+                        """)
+    #######################################################
+
+    # The code below is to control the layout width of the app.
+    if "widen" not in st.session_state:
+        layout = "centered"
+    else:
+        layout = "wide" if st.session_state.widen else "centered"
+
+    #######################################################
+
+    # The code below is for the title and logo.
+    title = 'Detect Age & Gender from Voice'
+    st.set_page_config(layout=layout, page_title=title, page_icon="🤗")
+    # The block of code below is to display the title, logos and introduce the app.
+
+
+    # DESIGN implement changes to the standard streamlit UI/UX
+    # --> optional, not relevant for the functionality of the component!
+
+    # Design move app further up and remove top padding
+    st.markdown('''<style>.css-1egvi7u {margin-top: -3rem;}</style>''',
+                unsafe_allow_html=True)
+    # Design change st.Audio to fixed height of 45 pixels
+    st.markdown('''<style>.stAudio {height: 45px;}</style>''',
+                unsafe_allow_html=True)
+    # Design change hyperlink href link color
+    st.markdown('''<style>.css-v37k9u a {color: #ff4c4b;}</style>''',
+                unsafe_allow_html=True)  # darkmode
+    st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''',
+                unsafe_allow_html=True)  # lightmode
+
+    st.title(title)
+    st.markdown("""
+        Classify your age & gender on-the-fly with this mighty app. Check if your voice sounds like you are `male` or `female` and in which age group:`teens`, `twenties`, `thirties`, `fourties`, `fifties`, `sexties`, `seventies`, `eighties` or `nineties`. 🚀
+        """)
+
+    st.markdown("""
+        ***Please use 'Chrome' or 'Firefox' for the best performance.***
+    """)
+    st.header('Instructions:')
+    st.markdown("""
+                    Press `Start Recording` to record your voice. \n\n 
+                    Say: `Hi AI, I am [Your name]. Can you guess my age and gender?` \n\n
+                    Then press `Stop`""")
+
+    setup_sideBar()
 
 
 def audiorec_demo_app():
-    # TITLE and Creator information
-    st.title('Detect Age from Voice')
-    st.markdown('Implemented by '
-                '[Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/) - '
-                'view project source code on '
-
-                '[GitHub](https://github.com/rifat1234/streamlit-age-from-voice)')
-    st.write('\n\n')
-    st.header('Instructions:')
-    st.markdown('Press \'Start Recording\' to record your voice. \n\nSay: '
-                '\'Hi, I am [Your name]. Nice to meet you AI. Can you guess my age and gender?\' \n\n'
-                'Then press \'Stop\'')
-
+    setup_layout()
     # TUTORIAL: How to use STREAMLIT AUDIO RECORDER?
     # by calling this function an instance of the audio recorder is created
     # once a recording is completed, audio data will be saved to wav_audio_data
@@ -126,16 +165,19 @@ def audiorec_demo_app():
     # add some spacing and informative messages
     col_info, col_space = st.columns([0.57, 0.43])
     #with col_info:
-    with st.spinner("Processing... "):
+    with st.spinner("Please wait... "):
         if wav_audio_data is not None:
             # display audio data as received on the Python side
             col_playback, col_space = st.columns([0.58, 0.42])
             with col_playback:
-                df = feature_extractor(wav_audio_data)
-                age = predict_age(df)
-                gender = predict_gender(df)
-                output = f"You are :blue[**{gender}**] in your :green[**{age}**]"
-                st.markdown(output)
+                try:
+                    df = feature_extractor(wav_audio_data)
+                    age = predict_age(df)
+                    gender = predict_gender(df)
+                    output = f"You are :blue[**{gender}**] in your :green[**{age}**]"
+                    st.success(output)
+                except:
+                    st.error("Check your internet connection")
 
 
 if __name__ == '__main__':
