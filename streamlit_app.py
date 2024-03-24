@@ -84,8 +84,29 @@ def predict_gender(df):
     x, scaler = scale_features('gender/scaler.save', df)
     encoder = joblib.load('gender/label_encoder.save')
     X_new = select_features('gender/feature_selector.save', x)
+
     knn_pred = predict('gender/knn_model.pkl', X_new)
-    return encoder.inverse_transform(knn_pred)[0]
+    svc_pred = predict('gender/svc_model.pkl', X_new)
+    dt_pred = predict('gender/dt_model.pkl', X_new)
+    gb_pred = predict('gender/gb_model.pkl', X_new)
+    gnb_pred = predict('gender/gnb_model.pkl', X_new)
+
+    # Applying ensemble learning
+    knn_score = 0.936
+    svc_score = 0.915
+    dt_score = 0.615
+    gb_score = 0.585
+    gnb_score = 0.493
+    w = [0] * 2
+
+    w[knn_pred[0]] += knn_score
+    w[svc_pred[0]] += svc_score
+    w[dt_pred[0]] += dt_score
+    w[gb_pred[0]] += gb_score
+    w[gnb_pred[0]] += gnb_score
+    pred = [np.argmax(w)]
+
+    return encoder.inverse_transform(pred)[0]
 
 def setup_layout():
     def setup_sideBar():
@@ -177,7 +198,7 @@ def audiorec_demo_app():
                     output = f"You are :blue[**{gender}**] in your :green[**{age}**]"
                     st.success(output)
                 except:
-                    st.error("Check your internet connection")
+                    st.error("Please check your internet connection")
 
 
 if __name__ == '__main__':
