@@ -115,9 +115,6 @@ def setup_layout():
             App is created using [MFCCs](https://librosa.org/doc/main/generated/librosa.feature.mfcc.html) feature extractor, [scikit-learn](https://scikit-learn.org/stable/) and 🎈[Streamlit](https://streamlit.io/).
             [Common voice](https://www.kaggle.com/datasets/mozillaorg/common-voice) database is used for training.
             """)
-        # st.sidebar.markdown("""
-        #     [Common voice database](https://www.kaggle.com/datasets/mozillaorg/common-voice) is used for training.
-        #     """)
         st.sidebar.markdown("""
             Developed by [Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/)
             """)
@@ -126,7 +123,7 @@ def setup_layout():
         st.sidebar.markdown(
                         """
                         - [Source Code](https://github.com/rifat1234/detect-age-from-voice)
-                        - [Project Report](https://www.overleaf.com/read/vbptvvrhzswt#b2f2bd)
+                        - [Project Report](https://github.com/rifat1234/detect-age-from-voice/blob/main/project_report.pdf)
                         """)
     #######################################################
 
