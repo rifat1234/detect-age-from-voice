@@ -162,7 +162,7 @@ def setup_layout():
         """)
 
     st.markdown("""
-        ***Please use 'Chrome' or 'Firefox' for the best performance.***
+        ***Please use 'Google Chrome' for the best performance.***
     """)
     st.header('Instructions:')
     st.markdown("""
